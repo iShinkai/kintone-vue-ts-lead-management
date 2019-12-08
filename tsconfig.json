@@ -27,6 +27,10 @@
       "scripthost"
     ]
   },
+  "files": [
+    "./node_modules/@kintone/dts-gen/kintone.d.ts",
+    "./src/lead-management.fields.d.ts" 
+  ],
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
@@ -35,6 +39,7 @@
     "tests/**/*.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist"
   ]
 }
