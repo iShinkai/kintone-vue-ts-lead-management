@@ -1,7 +1,5 @@
 <template lang="pug">
-  #app(
-    :style="appStyles"
-  )
+  #app
     Board.board(:records="records")
 </template>
 
@@ -39,26 +37,6 @@ export default class App extends Vue {
 
   /**
    * ========================================
-   *  算出プロパティ
-   * ========================================
-   */
-
-  /**
-   * スタイルを返却する
-   */
-  get appStyles() {
-    // 高さをウィンドウサイズに合わせる
-    if (this.$el) {
-      return {
-        height: `calc(100vh - ${this.getAppHeight(this.$el as HTMLElement)}px)`
-      }
-    }
-    return {}
-  }
-
-
-  /**
-   * ========================================
    *  ライフサイクルフック
    * ========================================
    */
@@ -67,24 +45,11 @@ export default class App extends Vue {
    * マウント時処理
    */
   mounted() {
-    // 高さをウィンドウサイズに合わせる
+    // アプリ部分の高さをウィンドウサイズに合わせる
     const el: HTMLElement = this.$el as HTMLElement;
-    el.style.height = `calc(100vh - ${this.getAppHeight(el)}px)`
-  }
-
-
-  /**
-   * ========================================
-   *  メソッド
-   * ========================================
-   */
-
-  /**
-   * アプリの高さを求める
-   */
-  getAppHeight(el: HTMLElement) {
     const rect = el.getBoundingClientRect();
-    return rect.top + 36; // .contents-bottommenu-gaia の高さ
+    const height = rect.top + 36; // 36 は .contents-bottommenu-gaia の高さ
+    el.style.height = `calc(100vh - ${height}px)`
   }
 }
 </script>
