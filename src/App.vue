@@ -1,34 +1,28 @@
 <template lang="pug">
-  #app
-    table
-      thead
-        tr 
-          th 会社名
-          th 先方担当者
-          th 見込み時期
-          th 確度
-          th 製品名
-          th 単価
-          th ユーザー数
-          th 小計
-      tbody
-        tr(v-for="record in records")
-          td {{record.会社名.value}}
-          td {{record.先方担当者.value}}
-          td {{record.見込み時期.value}}
-          td {{record.確度.value}}
-          td {{record.製品名.value}}
-          td {{record.単価.value}}
-          td {{record.ユーザー数.value}}
-          td {{record.小計.value}}
+  #app(
+    :style="appStyles"
+  )
+    Board.board(:records="records")
 </template>
 
 <script lang="ts">
 // デコレーター
 import { Component, Prop, Vue } from "vue-property-decorator";
 
+// FontAwesome 
+import { library } from "@fortawesome/fontawesome-svg-core"; 
+import { fas } from "@fortawesome/free-solid-svg-icons"; 
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"; 
+library.add(fas); 
+Vue.component('font-awesome-icon', FontAwesomeIcon);
+
 // コンポーネント
-@Component
+import Board from "./components/Board.vue"
+@Component({ 
+  components: { 
+    Board
+  } 
+}) 
 
 // クラス本体
 export default class App extends Vue {
@@ -41,31 +35,68 @@ export default class App extends Vue {
   // 表示対象のレコード
   @Prop({ default: [] })
   records!: leadManagement.types.SavedFields[];
+
+
+  /**
+   * ========================================
+   *  算出プロパティ
+   * ========================================
+   */
+
+  /**
+   * スタイルを返却する
+   */
+  get appStyles() {
+    // 高さをウィンドウサイズに合わせる
+    if (this.$el) {
+      return {
+        height: `calc(100vh - ${this.getAppHeight(this.$el as HTMLElement)}px)`
+      }
+    }
+    return {}
+  }
+
+
+  /**
+   * ========================================
+   *  ライフサイクルフック
+   * ========================================
+   */
+
+  /**
+   * マウント時処理
+   */
+  mounted() {
+    // 高さをウィンドウサイズに合わせる
+    const el: HTMLElement = this.$el as HTMLElement;
+    el.style.height = `calc(100vh - ${this.getAppHeight(el)}px)`
+  }
+
+
+  /**
+   * ========================================
+   *  メソッド
+   * ========================================
+   */
+
+  /**
+   * アプリの高さを求める
+   */
+  getAppHeight(el: HTMLElement) {
+    const rect = el.getBoundingClientRect();
+    return rect.top + 36; // .contents-bottommenu-gaia の高さ
+  }
 }
 </script>
 
 <style scoped lang="scss">
 #app {
-  table {
-    th,
-    td {
-      border: 1px solid #9cf;
-      padding: 2px 10px;
-    }
-    thead {
-      tr {
-        background-color: #dfd;
-      }
-    }
+  display: grid;
+  grid-template-rows: 1fr;
+  position: relative;
 
-    tbody {
-      tr {
-        background-color: #fff;
-        &:nth-child(even) {
-          background-color: #dff;
-        }
-      }
-    }
+  .board {
+    grid-row: 1;
   }
 }
 </style>
