@@ -4,11 +4,12 @@
       span.list-title-label 確度：
       span.list-title-value {{listTitle}}
     .list-body
-      Card(
-        v-for="r in records"
-        :key="r.$id.value"
-        :record="r"
-      )
+      Draggable.draggable(:options="{ group: 'list' }")
+        Card(
+          v-for="r in records"
+          :key="r.$id.value"
+          :record="r"
+        )
 </template>
 
 <script lang="ts">
@@ -17,11 +18,11 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 
 // コンポーネント
 import Card from "./Card.vue"
-import Chino from "./Chino.vue"
+import Draggable from "vuedraggable"
 @Component({ 
   components: { 
     Card,
-    Chino
+    Draggable
   } 
 }) 
 
@@ -51,15 +52,12 @@ export default class List extends Vue {
    * ========================================
    */
 
+  /**
+   * リストタイトル
+   */
   get listTitle(): string {
     return `[${this.group}]`;
   }
-
-  /** 
-   * ======================================== 
-   *  メソッド
-   * ======================================== 
-   */ 
 }
 </script>
 
@@ -94,6 +92,10 @@ export default class List extends Vue {
     grid-row: 2;
     overflow-y: auto;
     padding: 5px;
+
+    .draggable {
+      height: 100%;
+    }
   }
 }
 </style>

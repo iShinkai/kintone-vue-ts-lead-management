@@ -18,7 +18,8 @@
     "core-js": "^3.3.2",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
-    "vue-property-decorator": "^8.3.0"
+    "vue-property-decorator": "^8.3.0",
+    "vuedraggable": "^2.23.2"
   },
   "devDependencies": {
     "@kintone/dts-gen": "^2.1.2",

@@ -2,7 +2,10 @@
   .card
     .card-title
       span {{recordTitleValue}}
-      span.label-icon.record-icon
+      a.label-icon.record-icon(
+        :href="externalLink"
+        target="_blank"
+      )
         font-awesome-icon(icon="external-link-alt")
     .card-body
       .card-line.line-charge
@@ -112,11 +115,12 @@ export default class List extends Vue {
     return this.record.小計.value ? `￥ ${Number(this.record.小計.value).toLocaleString()}` : '--';
   }
 
-  /** 
-   * ======================================== 
-   *  メソッド
-   * ======================================== 
-   */ 
+  /**
+   * レコードのリンク先
+   */
+  get externalLink(): string {
+    return `/k/${kintone.app.getId()}/show#record=${this.record.$id.value}`;
+  }
 }
 </script>
 
