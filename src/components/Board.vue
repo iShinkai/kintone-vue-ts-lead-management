@@ -13,12 +13,12 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 // コンポーネント
-import List from "./List.vue"
-@Component({ 
-  components: { 
+import List from "./List.vue";
+@Component({
+  components: {
     List
-  } 
-}) 
+  }
+})
 
 // クラス本体
 export default class Board extends Vue {
@@ -44,15 +44,15 @@ export default class Board extends Vue {
    * リストの配列（確度でグルーピング）
    */
   get listGroups(): string[] {
-    let groups: string[] = [ "A", "B", "C" ];
+    let groups: string[] = ["A", "B", "C"];
     return groups;
   }
 
-  /** 
-   * ======================================== 
+  /**
+   * ========================================
    *  メソッド
-   * ======================================== 
-   */ 
+   * ========================================
+   */
 
   /**
    * グループ（確度）のレコードを抽出して返す

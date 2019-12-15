@@ -35,6 +35,20 @@ declare module "vuedraggable" {
     willInsertAfter: boolean;
     isTrusted: boolean;
   }
+  export interface DropEvent {
+    from: Element;
+    item: Element;
+    newDraggableIndex: number;
+    newIndex: number;
+    oldDraggableIndex: number;
+    oldIndex: number;
+    originalEvent: DragEvent;
+    path: Element[];
+    srcElement: Element;
+    target: Element;
+    to: Element;
+    type: string;
+  }
 
   const draggableComponent: ComponentOptions<Vue>;
 

@@ -1,14 +1,20 @@
+/// <reference path="@/types/vuedraggable/index.d.ts" />
 <template lang="pug">
   .list
     .list-title
       span.list-title-label 確度：
       span.list-title-value {{listTitle}}
     .list-body
-      Draggable.draggable(:options="{ group: 'list' }")
+      Draggable.draggable(
+        :group="'list'"
+        @end="onDropEnd"
+        :data-group="group"
+      )
         Card(
           v-for="r in records"
           :key="r.$id.value"
           :record="r"
+          :data-record-id="r.$id.value"
         )
 </template>
 
@@ -16,15 +22,18 @@
 // デコレーター
 import { Component, Prop, Vue } from "vue-property-decorator";
 
+// kintone JS SDK
+const kintoneJSSDK = require("@kintone/kintone-js-sdk");
+
 // コンポーネント
-import Card from "./Card.vue"
-import Draggable from "vuedraggable"
-@Component({ 
-  components: { 
+import Card from "./Card.vue";
+import Draggable, { DropEvent } from "vuedraggable";
+@Component({
+  components: {
     Card,
     Draggable
-  } 
-}) 
+  }
+})
 
 // クラス本体
 export default class List extends Vue {
@@ -37,7 +46,7 @@ export default class List extends Vue {
   /**
    * リストのタイトル（グループ名）
    */
-  @Prop({ default: '' })
+  @Prop({ default: "" })
   group!: string;
 
   /**
@@ -57,6 +66,43 @@ export default class List extends Vue {
    */
   get listTitle(): string {
     return `[${this.group}]`;
+  }
+
+  /**
+   * ========================================
+   *  イベント
+   * ========================================
+   */
+
+  /**
+   * カードのドラッグ＆ドロップ終了時処理
+   */
+  async onDropEnd(e: DropEvent) {
+    // 動かされたカードのレコード番号
+    const recordId: string = (e.item as HTMLElement).dataset.recordId!;
+
+    // 動かす前のリスト（確度）と動かされた先のリスト（確度）を確認し、同じだったら何もしない
+    const fromGroup: string = (e.from as HTMLElement).dataset.group!;
+    const toGroup: string = (e.to as HTMLElement).dataset.group!;
+    if (fromGroup === toGroup) {
+      return;
+    }
+
+    // レコード操作オブジェクトを作成
+    const kintoneRecord = new kintoneJSSDK.Record();
+
+    // 更新を実行
+    const result = await kintoneRecord
+      .updateRecordByID({
+        app: kintone.app.getId(),
+        id: recordId,
+        record: {
+          確度: { value: toGroup }
+        }
+      })
+      .catch((e: object) => {
+        window.alert(e);
+      });
   }
 }
 </script>
@@ -87,7 +133,7 @@ export default class List extends Vue {
       font-size: 18px;
     }
   }
-  
+
   .list-body {
     grid-row: 2;
     overflow-y: auto;

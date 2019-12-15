@@ -72,9 +72,9 @@ export default class List extends Vue {
    */
   get chargeValue(): string {
     if (!this.record.案件担当者名.value.length) {
-      return "--"
+      return "--";
     }
-    return this.record.案件担当者名.value.map(v => v.name).join(', ');
+    return this.record.案件担当者名.value.map(v => v.name).join(", ");
   }
 
   /**
@@ -82,9 +82,9 @@ export default class List extends Vue {
    */
   get periodValue(): string {
     if (!this.record.見込み時期.value) {
-      return "--"
+      return "--";
     }
-    return this.record.見込み時期.value.replace(/-/g, '/');
+    return this.record.見込み時期.value.replace(/-/g, "/");
   }
 
   /**
@@ -98,21 +98,27 @@ export default class List extends Vue {
    * 単価の値
    */
   get unitValue(): string {
-    return this.record.単価.value ? `${Number(this.record.単価.value).toLocaleString()}` : '--';
+    return this.record.単価.value
+      ? `${Number(this.record.単価.value).toLocaleString()}`
+      : "--";
   }
 
   /**
    * ユーザー数の値
    */
   get userCountValue(): string {
-    return this.record.ユーザー数.value ? `${Number(this.record.ユーザー数.value).toLocaleString()} 人` : '--';
+    return this.record.ユーザー数.value
+      ? `${Number(this.record.ユーザー数.value).toLocaleString()} 人`
+      : "--";
   }
 
   /**
    * 小計の値
    */
   get subtotalValue(): string {
-    return this.record.小計.value ? `￥ ${Number(this.record.小計.value).toLocaleString()}` : '--';
+    return this.record.小計.value
+      ? `￥ ${Number(this.record.小計.value).toLocaleString()}`
+      : "--";
   }
 
   /**
@@ -154,7 +160,7 @@ export default class List extends Vue {
       }
     }
   }
-  
+
   .card-body {
     padding: 3px;
 
@@ -163,7 +169,9 @@ export default class List extends Vue {
       line-height: 24px;
       justify-content: space-between;
 
-      .label, .label-icon, .value {
+      .label,
+      .label-icon,
+      .value {
         display: inline-block;
         line-height: 20px;
         padding-right: 5px;
