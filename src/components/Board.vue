@@ -5,6 +5,8 @@
       :key="g"
       :group="g"
       :records="getGroupRecords(g)"
+      :data-group="g"
+      @card-moved="handleCardMoved"
     )
 </template>
 
@@ -59,6 +61,14 @@ export default class Board extends Vue {
    */
   getGroupRecords(g: string): leadManagement.types.SavedFields[] {
     return this.records.filter(r => r.確度.value === g);
+  }
+
+  /**
+   * カード移動時処理（子コンポーネントから emit）
+   */
+  handleCardMoved(r: { id: string; group: string }) {
+    // 親コンポーネントのメソッドを emit
+    this.$emit("card-moved", r);
   }
 }
 </script>

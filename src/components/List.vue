@@ -7,8 +7,8 @@
     .list-body
       Draggable.draggable(
         :group="'list'"
-        @end="onDropEnd"
         :data-group="group"
+        @end="onDropEnd"
       )
         Card(
           v-for="r in records"
@@ -21,9 +21,6 @@
 <script lang="ts">
 // デコレーター
 import { Component, Prop, Vue } from "vue-property-decorator";
-
-// kintone JS SDK
-const kintoneJSSDK = require("@kintone/kintone-js-sdk");
 
 // コンポーネント
 import Card from "./Card.vue";
@@ -88,21 +85,8 @@ export default class List extends Vue {
       return;
     }
 
-    // レコード操作オブジェクトを作成
-    const kintoneRecord = new kintoneJSSDK.Record();
-
-    // 更新を実行
-    const result = await kintoneRecord
-      .updateRecordByID({
-        app: kintone.app.getId(),
-        id: recordId,
-        record: {
-          確度: { value: toGroup }
-        }
-      })
-      .catch((e: object) => {
-        window.alert(e);
-      });
+    // 親コンポーネントのメソッドを emit
+    this.$emit("card-moved", { id: recordId, group: toGroup });
   }
 }
 </script>

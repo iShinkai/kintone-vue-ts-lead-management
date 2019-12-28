@@ -6,6 +6,9 @@ Vue.config.productionTip = false;
 // マウントポイント
 const mountPount: string = "lead-management";
 
+// VM の参照
+let vm: Vue;
+
 // インターフェイス
 interface KintoneEvent {
   offset: Number;
@@ -19,22 +22,26 @@ interface KintoneEvent {
 /**
  * イベント処理
  */
-
 kintone.events.on(["app.record.index.show"], (e: KintoneEvent) => {
-  // カスタマイズビューでないか既にマウント済みなら何もしない
-  if (e.viewType !== "custom" || document.querySelector("#app")) {
+  // カスタマイズビューでないなら何もしない
+  if (e.viewType !== "custom") {
     return e;
   }
+  console.log(JSON.stringify(e.records));
 
-  // マウントポイントにマウント実行
-  if (document.querySelector(`#${mountPount}`)) {
-    new Vue({
-      render: h =>
-        h(App, {
-          props: {
-            records: e.records
-          }
-        })
-    }).$mount(`#${mountPount}`);
+  // マウントポイントが存在するなら
+  if (
+    document.querySelector(`#${mountPount}`) ||
+    document.querySelector("#app")
+  ) {
+    // 未マウントならマウント実行
+    if (!document.querySelector("#app")) {
+      vm = new Vue({
+        render: h => h(App)
+      }).$mount(`#${mountPount}`);
+    }
+
+    // レコードをセット
+    Vue.set(vm.$children[0], "records", e.records);
   }
 });

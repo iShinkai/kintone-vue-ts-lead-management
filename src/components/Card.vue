@@ -125,7 +125,7 @@ export default class List extends Vue {
    * レコードのリンク先
    */
   get externalLink(): string {
-    return `/k/${kintone.app.getId()}/show#record=${this.record.$id.value}`;
+    return `${location.pathname}show#record=${this.record.$id.value}`;
   }
 }
 </script>

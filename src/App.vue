@@ -1,11 +1,14 @@
 <template lang="pug">
   #app
-    Board.board(:records="records")
+    Board.board(:records="records" @card-moved="handleCardMoved")
 </template>
 
 <script lang="ts">
 // デコレーター
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
+
+// kintone JS SDK
+const kintoneJSSDK = require("@kintone/kintone-js-sdk");
 
 // FontAwesome
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -26,13 +29,30 @@ import Board from "./components/Board.vue";
 export default class App extends Vue {
   /**
    * ========================================
-   *  プロパティ
+   *  データ
    * ========================================
    */
 
-  // 表示対象のレコード
-  @Prop({ default: [] })
-  records!: leadManagement.types.SavedFields[];
+  /**
+   * 表示対象のレコード
+   */
+  recordData: leadManagement.types.SavedFields[] = [];
+
+  /**
+   * ========================================
+   *  算出プロパティ
+   * ========================================
+   */
+
+  /**
+   * 表示対象のレコード
+   */
+  get records() {
+    return this.recordData;
+  }
+  set records(value) {
+    this.recordData = value;
+  }
 
   /**
    * ========================================
@@ -49,6 +69,33 @@ export default class App extends Vue {
     const rect = el.getBoundingClientRect();
     const height = rect.top + 36; // 36 は .contents-bottommenu-gaia の高さ
     el.style.height = `calc(100vh - ${height}px)`;
+  }
+
+  /**
+   * ========================================
+   *  メソッド
+   * ========================================
+   */
+
+  /**
+   * カード移動時処理（子コンポーネントから emit）
+   */
+  async handleCardMoved(r: { id: string; group: string }) {
+    // レコード操作オブジェクトを作成
+    const kintoneRecord = new kintoneJSSDK.Record();
+
+    // 更新を実行
+    const result = await kintoneRecord
+      .updateRecordByID({
+        app: kintone.app.getId(),
+        id: r.id,
+        record: {
+          確度: { value: r.group }
+        }
+      })
+      .catch((e: object) => {
+        window.alert(e);
+      });
   }
 }
 </script>
