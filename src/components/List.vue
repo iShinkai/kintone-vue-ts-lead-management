@@ -74,7 +74,7 @@ export default class List extends Vue {
   /**
    * カードのドラッグ＆ドロップ終了時処理
    */
-  async onDropEnd(e: DropEvent) {
+  onDropEnd(e: DropEvent) {
     // 動かされたカードのレコード番号
     const recordId: string = (e.item as HTMLElement).dataset.recordId!;
 

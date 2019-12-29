@@ -59,3 +59,25 @@ describe("レコードのリスト分類のテスト", () => {
     );
   });
 });
+
+describe("イベントのテスト", () => {
+  it("ドラッグ終了イベントが emit されるか", () => {
+    const wrapper = shallowMount(Board, {
+      propsData: { records },
+      stubs: {
+        FontAwesomeIcon
+      }
+    });
+    wrapper.vm.$emit("card-moved", {
+      id: records[0].$id.value,
+      group: records[0].確度.value
+    });
+    expect(wrapper.emitted("card-moved")).toBeTruthy();
+    expect(wrapper.emitted("card-moved")[0][0].id).toEqual(
+      records[0].$id.value
+    );
+    expect(wrapper.emitted("card-moved")[0][0].group).toEqual(
+      records[0].確度.value
+    );
+  });
+});

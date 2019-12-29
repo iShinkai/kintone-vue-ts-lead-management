@@ -27,7 +27,6 @@ kintone.events.on(["app.record.index.show"], (e: KintoneEvent) => {
   if (e.viewType !== "custom") {
     return e;
   }
-  console.log(JSON.stringify(e.records));
 
   // マウントポイントが存在するなら
   if (

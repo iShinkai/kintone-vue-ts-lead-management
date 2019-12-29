@@ -10,10 +10,10 @@ library.add(fas);
 // テストデータ
 const records: leadManagement.types.SavedFields[] = require("../../records.json");
 
-describe("List コンポーネントのマウント", () => {
-  // 確度 A だけを抽出しておく
-  const aRecords = records.filter(r => r.確度.value === "A");
+// 確度 A だけを抽出しておく
+const aRecords = records.filter(r => r.確度.value === "A");
 
+describe("List コンポーネントのマウント", () => {
   // コンポーネントのマウントテスト
   it("正しくマウントできるか", () => {
     const wrapper = shallowMount(List, {
@@ -29,9 +29,6 @@ describe("List コンポーネントのマウント", () => {
 });
 
 describe("カードの枚数", () => {
-  // 確度 A だけを抽出しておく
-  const aRecords = records.filter(r => r.確度.value === "A");
-
   // カードの枚数がレコードの数ぶん存在するかどうかのテスト
   it("カードの枚数がレコードの数ぶん存在するか", () => {
     const wrapper = mount(List, {
@@ -41,5 +38,22 @@ describe("カードの枚数", () => {
       }
     });
     expect(wrapper.findAll(".card").length).toBe(aRecords.length);
+  });
+});
+
+describe("イベントのテスト", () => {
+  it("ドラッグ終了イベントが emit されるか", () => {
+    const wrapper = shallowMount(List, {
+      propsData: { group: "A", records: aRecords },
+      stubs: {
+        FontAwesomeIcon
+      }
+    });
+    wrapper.vm.$emit("card-moved", { id: aRecords[0].$id.value, group: "A" });
+    expect(wrapper.emitted("card-moved")).toBeTruthy();
+    expect(wrapper.emitted("card-moved")[0][0].id).toEqual(
+      aRecords[0].$id.value
+    );
+    expect(wrapper.emitted("card-moved")[0][0].group).toEqual("A");
   });
 });
