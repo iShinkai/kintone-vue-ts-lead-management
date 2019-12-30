@@ -24,6 +24,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 
 // コンポーネント
 import Card from "./Card.vue";
+// eslint-disable-next-line no-unused-vars
 import Draggable, { DropEvent } from "vuedraggable";
 @Component({
   components: {
